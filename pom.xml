@@ -63,7 +63,7 @@
                     <includes>
                         <include>**/*</include>
                     </includes>
-                    <repositoryName>paulsiberian.github.io</repositoryName>
+                    <repositoryName>armus-api</repositoryName>
                     <repositoryOwner>paulsiberian</repositoryOwner>
                 </configuration>
                 <executions>
