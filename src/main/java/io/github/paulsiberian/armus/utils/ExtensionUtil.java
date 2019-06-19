@@ -25,6 +25,7 @@ public class ExtensionUtil {
     public static final String URL = "extension.url";
     public static final String AUTHOR_NAME = "extension.author.name";
     public static final String AUTHOR_EMAIL = "extension.author.email";
+    public static final String MAIN_CLASS = "extension.main-class";
 
     private ExtensionUtil() {
     }
@@ -51,7 +52,8 @@ public class ExtensionUtil {
             WorkspaceUtil.mkDir(root);
         }
         var files = root.listFiles(pathname -> pathname.isFile() && pathname.getName().endsWith(".jar"));
-        if (files == null || files.length == 0) {
+
+        /*if (files == null || files.length == 0) {
             for (var file : files) {
                 try {
                     var jarURL = file.toURI().toURL();
@@ -79,7 +81,7 @@ public class ExtensionUtil {
                     e.printStackTrace();
                 }
             }
-        }
+        }*/
     }
 
     public List<IExtension> getExtensions() {
