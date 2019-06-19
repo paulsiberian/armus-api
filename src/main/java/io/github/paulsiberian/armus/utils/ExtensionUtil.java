@@ -8,35 +8,49 @@ import io.github.paulsiberian.armus.extension.IExtension;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.jar.JarFile;
 
 public class ExtensionUtil {
     private static ExtensionUtil ourInstance = new ExtensionUtil();
 
     private List<IExtension> extensions;
-    private File extensionDir;
+    private File root;
+
+    public static final String NAME = "name";
+    public static final String DESCRIPTION = "description";
+    public static final String VERSION = "version";
+    public static final String AUTHOR = "author";
+    public static final String EMAIL = "email";
+    public static final String SITE = "site";
+
+    private ExtensionUtil() {
+    }
+
+    private Properties loadProperties(Class c) {
+        try (var stream = c.getResourceAsStream("info.properties")) {
+            var props = new Properties();
+            props.load(stream);
+            return props;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     public static ExtensionUtil getInstance() {
         return ourInstance;
     }
 
-    private ExtensionUtil() {
-    }
-
     public void load(File appDir) throws IOException {
         extensions = new ArrayList<>();
-        extensionDir = new File(appDir.getPath() + File.separator + "extensions");
-        if (!extensionDir.exists()) {
-            WorkspaceUtil.mkDir(extensionDir);
+        root = new File(appDir.getPath() + File.separator + "extensions");
+        if (!root.exists()) {
+            WorkspaceUtil.mkDir(root);
         }
-        var files = extensionDir.listFiles(pathname -> pathname.isFile() && pathname.getName().endsWith(".jar"));
+        var files = root.listFiles(pathname -> pathname.isFile() && pathname.getName().endsWith(".jar"));
         if (files == null || files.length == 0) {
             for (var file : files) {
                 try {
@@ -53,8 +67,11 @@ public class ExtensionUtil {
                         var interfaces = c.getInterfaces();
                         for (var i : interfaces) {
                             if (i.getName().endsWith(".IExtension")) {
-                                var constructor = classLoader.loadClass(c.getName()).getConstructor();
-                                extensions.add((IExtension) constructor.newInstance());
+                                var cl = classLoader.loadClass(c.getName());
+                                var constructor = cl.getConstructor();
+                                var main = (IExtension) constructor.newInstance();
+                                main.setProperties(loadProperties(cl));
+                                extensions.add(main);
                             }
                         }
                     }
@@ -69,7 +86,7 @@ public class ExtensionUtil {
         return extensions;
     }
 
-    public File getExtensionDir() {
-        return extensionDir;
+    public File getRoot() {
+        return root;
     }
 }

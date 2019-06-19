@@ -4,12 +4,11 @@
 
 package io.github.paulsiberian.armus.extension;
 
+import java.util.Properties;
+
 public interface IExtension {
     boolean init();
-    boolean isActive();
-    void active(boolean b);
-    String getName();
-    String getVersion();
-    String getAuthor();
-    String getDescription();
+    void start();
+    void setProperties(Properties props);
+    String getProperty(String key);
 }

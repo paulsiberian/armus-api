@@ -12,8 +12,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
 public class SettingsUtil {
-    private static final String WORKSPACE_SETTINGS_FILE_NAME = "Workspace.properties";
-    private static final String WINDOW_SETTINGS_FILE_NAME = "Window.properties";
+    private static final String EXT = ".properties";
+    private static final String WORKSPACE_SETTINGS_FILE_NAME = "Workspace" + EXT;
+    private static final String WINDOW_SETTINGS_FILE_NAME = "Window" + EXT;
+    private static final String EXTENSIONS_SETTINGS_FILE_NAME = "Extensions" + EXT;
 
     private static final SettingsUtil ourInstance = new SettingsUtil();
 
