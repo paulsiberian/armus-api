@@ -19,12 +19,12 @@ public class ExtensionUtil {
     private List<IExtension> extensions;
     private File root;
 
-    public static final String NAME = "name";
-    public static final String DESCRIPTION = "description";
-    public static final String VERSION = "version";
-    public static final String AUTHOR = "author";
-    public static final String EMAIL = "email";
-    public static final String SITE = "site";
+    public static final String NAME = "extension.name";
+    public static final String DESCRIPTION = "extension.description";
+    public static final String VERSION = "extension.version";
+    public static final String URL = "extension.url";
+    public static final String AUTHOR_NAME = "extension.author.name";
+    public static final String AUTHOR_EMAIL = "extension.author.email";
 
     private ExtensionUtil() {
     }
