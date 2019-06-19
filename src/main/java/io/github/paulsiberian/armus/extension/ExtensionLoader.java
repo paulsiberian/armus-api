@@ -9,20 +9,18 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.HashSet;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 import java.util.zip.ZipFile;
 
 public class ExtensionLoader<T extends IExtension> {
     private Set<T> extensions;
-    private Set<Class<?>> classes;
+    private Map<Class<?>, Properties> classes;
     private File root;
 
     public ExtensionLoader(File root) {
         this.root = root;
         extensions = new HashSet<>();
-        classes = new HashSet<>();
+        classes = new HashMap<>();
     }
 
     public void load() {
@@ -41,13 +39,13 @@ public class ExtensionLoader<T extends IExtension> {
                                 new URL[] { jar.toURI().toURL() },
                                 getClass().getClassLoader()
                         );
-                        classes.add(loader.loadClass(mainClass));
+                        classes.put(loader.loadClass(mainClass), props);
 
                     } catch (IOException e) {
-                        System.out.println("Error while loading module file " + jar.getName());
+                        System.out.println("Ошибка во время загрузки файла " + jar.getName());
                         e.printStackTrace();
                     } catch (ClassNotFoundException e) {
-                        System.out.println("Class not found! Wrong main defined in extension.properties?: " + jar.getName() + " class: " + mainClass);
+                        System.out.println("Класс не найден! Возможно он неправильно определён в extension.properties: " + jar.getName() + ' ' + ExtensionUtil.MAIN_CLASS + '=' + mainClass);
                         e.printStackTrace();
                     }
                 }
@@ -62,21 +60,31 @@ public class ExtensionLoader<T extends IExtension> {
     }
 
     public void enableExtensions() {
-        classes.forEach(c -> {
+        classes.forEach((c, p) -> {
             try {
                 var extension = (T) c.getConstructor().newInstance();
                 if (extension.init()) {
-                    System.out.println("Extension loaded.");
+                    System.out.println("Расширение \"" + p.getProperty(ExtensionUtil.NAME) + "\" инициализировано.");
                     extensions.add(extension);
-                    System.out.println("Loaded extensions: " + extensions.size());
                 } else {
-                    System.out.println("Extension unloaded");
+                    System.out.println("Расширение \"" + p.getProperty(ExtensionUtil.NAME) + "\" не удалось инициализировать.");
                 }
             } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
                 e.printStackTrace();
             }
         });
+        System.out.println("Загружено расширений: " + extensions.size());
     }
 
+    public Set<T> getExtensions() {
+        return extensions;
+    }
 
+    public Map<Class<?>, Properties> getClasses() {
+        return classes;
+    }
+
+    public File getRoot() {
+        return root;
+    }
 }

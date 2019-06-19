@@ -20,7 +20,7 @@
         <github.global.server>github</github.global.server>
         <!--    Dependencies version    -->
         <junit-jupiter.version>5.5.0-RC1</junit-jupiter.version>
-        <!--  Plugins version  -->
+        <!--    Plugins version    -->
         <maven-deploy-plugin>3.0.0-M1</maven-deploy-plugin>
         <site-maven-plugin.version>0.12</site-maven-plugin.version>
     </properties>
