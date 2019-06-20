@@ -12,14 +12,18 @@
     <artifactId>armus-api</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>ARMUS API Library</name>
+    <url>https://github.com/paulsiberian/armus-api</url>
 
     <properties>
+        <!--    Build properties    -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
+        <!--    Deploy properties    -->
         <github.global.server>github</github.global.server>
         <!--    Dependencies version    -->
         <junit-jupiter.version>5.5.0-RC1</junit-jupiter.version>
+        <openjfx.version>11.0.2</openjfx.version>
         <!--    Plugins version    -->
         <maven-deploy-plugin>3.0.0-M1</maven-deploy-plugin>
         <site-maven-plugin.version>0.12</site-maven-plugin.version>
@@ -31,6 +35,17 @@
             <artifactId>junit-jupiter-api</artifactId>
             <version>${junit-jupiter.version}</version>
             <scope>test</scope>
+        </dependency>
+        <!--    OpenJFX    -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>${openjfx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>${openjfx.version}</version>
         </dependency>
     </dependencies>
 
@@ -81,6 +96,15 @@
                 </executions>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>src/main/resources-filtered</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
     </build>
 
 </project>

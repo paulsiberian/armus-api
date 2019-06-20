@@ -58,6 +58,25 @@ public class WorkspaceUtil {
         return getFileList(dir, true);
     }
 
+    private static FileOutputStream createFile(File f) throws IOException {
+        if (f.createNewFile()) {
+            System.out.println("Файл " + f.getPath() + " создан.");
+            return new FileOutputStream(f);
+        } else {
+            throw new WorkspaceException("Файл " + f.getPath() + " не создан.", f);
+        }
+    }
+
+    private static void cpDir(File src, File dest) throws IOException {
+        Files.walk(src.toPath()).forEach(s -> {
+            try {
+                Files.copy(s, dest.toPath().resolve(src.toPath().relativize(s)));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
     public static File[] findFileArray(String s, File dir) throws IOException {
         return findFileList(s, dir).toArray(new File[0]);
     }
@@ -100,21 +119,36 @@ public class WorkspaceUtil {
     }
 
     public static FileOutputStream mkFile(String namePath) throws IOException {
-        var f = new File(namePath);
-        if (!f.exists()) {
-            if (f.createNewFile()) {
-                System.out.println("Файл " + f.getPath() + " создан.");
-                return new FileOutputStream(f);
-            } else {
-                throw new WorkspaceException("Файл " + f.getPath() + " не создан.", f);
-            }
-        } else {
-            System.out.println("Файл " + f.getPath() + " уже существует.");
-            return new FileOutputStream(f);
-        }
+        return mkFile(new File(namePath));
     }
 
     public static FileOutputStream mkFile(String name, File dir) throws IOException {
         return mkFile(dir.getPath() + File.separator + name);
+    }
+
+    public static FileOutputStream mkFile(File f) throws IOException {
+        if (!f.exists()) {
+            return createFile(f);
+        } else if (f.isFile()) {
+            System.out.println("Файл " + f.getPath() + " уже существует.");
+            return new FileOutputStream(f);
+        } else {
+            return createFile(f);
+        }
+    }
+
+    public static void cp(File src, File dest) throws IOException {
+        if (src.exists()) {
+            if (src.isFile()) {
+                if (dest.exists() && dest.isFile()) {
+                    System.out.println("Файл уже существует");
+                } else {
+                    mkDir(new File(dest.getParentFile().getPath()));
+                    Files.copy(src.toPath(), dest.toPath());
+                }
+            } else if (src.isDirectory()) {
+                cpDir(src, dest);
+            }
+        }
     }
 }

@@ -2,36 +2,44 @@
  * Copyright (c) Храпунов П. Н., 2019.
  */
 
-package io.github.paulsiberian.armus.utils;
+package io.github.paulsiberian.armus;
+
+import io.github.paulsiberian.armus.utils.OSUtil;
+import io.github.paulsiberian.armus.utils.WorkspaceUtil;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.Properties;
 
-public class SettingsUtil {
+public class SettingsManager {
     private static final String EXT = ".properties";
-    private static final String WORKSPACE_SETTINGS_FILE_NAME = "Workspace" + EXT;
-    private static final String WINDOW_SETTINGS_FILE_NAME = "Window" + EXT;
-    private static final String EXTENSIONS_SETTINGS_FILE_NAME = "Extensions" + EXT;
+    private static final String WINDOW = "window";
+    private static final String WORKSPACE = "workspace";
+    private static final String WORKSPACE_SETTINGS_FILE_NAME = WORKSPACE + EXT;
+    private static final String WINDOW_SETTINGS_FILE_NAME = WINDOW + EXT;
 
-    private static final SettingsUtil ourInstance = new SettingsUtil();
+    private static final SettingsManager ourInstance = new SettingsManager();
 
-    public static final String WORKSPACE_PATH = "workspace.path";
-    public static final String WINDOW_WIDTH = "window.width";
-    public static final String WINDOW_HEIGHT = "window.height";
-    public static final String WINDOW_MAXIMIZED = "window.maximized";
+    public static final String WORKSPACE_PATH = WORKSPACE + ".path";
+    public static final String WINDOW_WIDTH = WINDOW + ".width";
+    public static final String WINDOW_HEIGHT = WINDOW + ".height";
+    public static final String WINDOW_MAXIMIZED = WINDOW + ".maximized";
 
     private Properties workspaceProps;
     private Properties windowProps;
     private File appDir;
+    private Property<Locale> locale;
 
-    private SettingsUtil() {
+    private SettingsManager() {
     }
 
-    public static SettingsUtil getInstance() {
+    public static SettingsManager getInstance() {
         return ourInstance;
     }
 
@@ -66,6 +74,7 @@ public class SettingsUtil {
     }
 
     public void init(Class c) throws IOException {
+        locale = new SimpleObjectProperty<>(Locale.getDefault());
         workspaceProps = new Properties();
         windowProps = new Properties();
         var userHomeDir = System.getProperty("user.home");
@@ -98,5 +107,17 @@ public class SettingsUtil {
 
     public File getAppDir() {
         return appDir;
+    }
+
+    public Locale getLocale() {
+        return locale.getValue();
+    }
+
+    public Property<Locale> localeProperty() {
+        return locale;
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale.setValue(locale);
     }
 }
