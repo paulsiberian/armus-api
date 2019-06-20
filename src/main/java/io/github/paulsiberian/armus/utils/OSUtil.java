@@ -5,6 +5,11 @@
 package io.github.paulsiberian.armus.utils;
 
 public class OSUtil {
+
+    public static String OSArch() {
+        return System.getProperty("os.arch");
+    }
+
     public static String OSName() {
         return System.getProperty("os.name");
     }
@@ -18,7 +23,8 @@ public class OSUtil {
     }
 
     public static boolean isNix() {
-        return OSName().toLowerCase().contains("nix");
+        var name = OSName().toLowerCase();
+        return name.contains("nix") || name.contains("nux");
     }
 
     public static boolean isWindows() {
