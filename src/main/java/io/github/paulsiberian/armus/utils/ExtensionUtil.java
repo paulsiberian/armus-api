@@ -21,14 +21,6 @@ public class ExtensionUtil {
     private static final String EXTENSION_LIST_FILE_NAME = EXTENSION + "_list" + EXT;
     private static final String EXTENSION_PROPERTIES_FILE_NAME = EXTENSION + EXT;
 
-    public static final String NAME = EXTENSION + ".name";
-    public static final String DESCRIPTION = EXTENSION + ".description";
-    public static final String VERSION = EXTENSION + ".version";
-    public static final String URL = EXTENSION + ".url";
-    public static final String AUTHOR_NAME = EXTENSION + ".author.name";
-    public static final String AUTHOR_EMAIL = EXTENSION + ".author.email";
-    public static final String MAIN_CLASS = EXTENSION + ".main-class";
-
     private static String getMainClass(Properties p) {
         return p.getProperty(MAIN_CLASS);
     }
@@ -36,7 +28,7 @@ public class ExtensionUtil {
     public static Properties getExtensionProperties(File jar) {
         try {
             var zipJar = new ZipFile(jar);
-            var stream = zipJar.getInputStream(zipJar.getEntry(ExtensionUtil.EXTENSION_PROPERTIES_FILE_NAME));
+            var stream = zipJar.getInputStream(zipJar.getEntry(EXTENSION_PROPERTIES_FILE_NAME));
             var properties = new Properties();
             properties.load(stream);
             return properties;
@@ -110,4 +102,13 @@ public class ExtensionUtil {
         }
         return map;
     }
+
+    /* Properties keys */
+    public static final String NAME = EXTENSION + ".name";
+    public static final String DESCRIPTION = EXTENSION + ".description";
+    public static final String VERSION = EXTENSION + ".version";
+    public static final String URL = EXTENSION + ".url";
+    public static final String AUTHOR_NAME = EXTENSION + ".author.name";
+    public static final String AUTHOR_EMAIL = EXTENSION + ".author.email";
+    public static final String MAIN_CLASS = EXTENSION + ".main-class";
 }

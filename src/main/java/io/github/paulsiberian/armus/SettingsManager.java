@@ -6,6 +6,7 @@ package io.github.paulsiberian.armus;
 
 import io.github.paulsiberian.armus.utils.OSUtil;
 import io.github.paulsiberian.armus.utils.WorkspaceUtil;
+import io.github.paulsiberian.armus.workspace.WorkspaceException;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 
@@ -23,16 +24,10 @@ public class SettingsManager {
     private static final String WORKSPACE = "workspace";
     private static final String WORKSPACE_SETTINGS_FILE_NAME = WORKSPACE + EXT;
     private static final String WINDOW_SETTINGS_FILE_NAME = WINDOW + EXT;
-
     private static final SettingsManager ourInstance = new SettingsManager();
 
-    public static final String WORKSPACE_PATH = WORKSPACE + ".path";
-    public static final String WINDOW_WIDTH = WINDOW + ".width";
-    public static final String WINDOW_HEIGHT = WINDOW + ".height";
-    public static final String WINDOW_MAXIMIZED = WINDOW + ".maximized";
-
-    private Properties workspaceProps;
-    private Properties windowProps;
+    private Properties workspace;
+    private Properties window;
     private File appDir;
     private Property<Locale> locale;
 
@@ -43,21 +38,41 @@ public class SettingsManager {
         return ourInstance;
     }
 
-    private void createDefaultSettings(File dir) throws IOException {
-        workspaceProps.setProperty(WORKSPACE_PATH, dir.getPath() + File.separator + "Workspace");
-        windowProps.setProperty(WINDOW_WIDTH, "600");
-        windowProps.setProperty(WINDOW_HEIGHT, "400");
-        windowProps.setProperty(WINDOW_MAXIMIZED, "false");
-        writeSettings(workspaceProps, WORKSPACE_SETTINGS_FILE_NAME, dir);
-        writeSettings(windowProps, WINDOW_SETTINGS_FILE_NAME, dir);
+    private void createDefault(File file) throws IOException {
+        if (file.getName().equals(WORKSPACE_SETTINGS_FILE_NAME)) {
+            workspace.setProperty(WORKSPACE_PATH, file.getPath() + File.separator + "Workspace");
+            write(workspace, file);
+        }
+        if (file.getName().equals(WINDOW_SETTINGS_FILE_NAME)) {
+            window.setProperty(WINDOW_WIDTH, "600");
+            window.setProperty(WINDOW_HEIGHT, "400");
+            window.setProperty(WINDOW_MAXIMIZED, "false");
+            write(window, file);
+        }
     }
 
-    private void writeSettings(Properties props, String name, File dir) throws IOException {
-        props.store(WorkspaceUtil.mkFile(name, dir), LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+    private void readOrCreate(Properties properties, File file) {
+        if (!file.exists()) {
+            try {
+                createDefault(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                read(properties, file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    private void readSettings(Properties props, File file) throws IOException {
-        props.load(new FileInputStream(file));
+    private void write(Properties properties, File file) throws IOException {
+        properties.store(WorkspaceUtil.mkFile(file), LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+    }
+
+    private void read(Properties properties, File file) throws IOException {
+        properties.load(new FileInputStream(file));
     }
 
     private String appDataDir() {
@@ -65,7 +80,7 @@ public class SettingsManager {
             return  "Library";
         }
         if (OSUtil.isNix()) {
-            return  ".config";
+            return  ".local" + File.separator + "share";
         }
         if (OSUtil.isWindows()) {
             return  "AppData" + File.separator + "Roaming";
@@ -73,51 +88,53 @@ public class SettingsManager {
         return "Applications";
     }
 
-    public void init(Class c) throws IOException {
+    public final void init(final Class c) {
         locale = new SimpleObjectProperty<>(Locale.getDefault());
-        workspaceProps = new Properties();
-        windowProps = new Properties();
+        workspace = new Properties();
+        window = new Properties();
         var userHomeDir = System.getProperty("user.home");
         var packageName = c.getPackageName();
         appDir = new File(userHomeDir + File.separator + appDataDir() + File.separator + packageName);
         if (!appDir.exists()) {
-            WorkspaceUtil.mkDir(appDir);
+            try {
+                WorkspaceUtil.mkDir(appDir);
+            } catch (WorkspaceException e) {
+                e.printStackTrace();
+            }
         }
-        var workspaceFile = new File(appDir.getPath() + WORKSPACE_SETTINGS_FILE_NAME);
-        if (!workspaceFile.exists()) {
-            createDefaultSettings(appDir);
-        } else {
-            readSettings(workspaceProps, workspaceFile);
-        }
-        var windowFile = new File(appDir.getPath() + WINDOW_SETTINGS_FILE_NAME);
-        if (!windowFile.exists()) {
-            createDefaultSettings(appDir);
-        } else {
-            readSettings(windowProps, windowFile);
-        }
+        var workspaceFile = new File(appDir.getPath() + File.separator + WORKSPACE_SETTINGS_FILE_NAME);
+        readOrCreate(workspace, workspaceFile);
+        var windowFile = new File(appDir.getPath() + File.separator + WINDOW_SETTINGS_FILE_NAME);
+        readOrCreate(window, windowFile);
     }
 
-    public String getWorkspaceProperty(String key) {
-        return workspaceProps.getProperty(key);
+    public final String getWorkspaceProperty(String key) {
+        return workspace.getProperty(key);
     }
 
-    public String getWindowProperty(String key) {
-        return windowProps.getProperty(key);
+    public final String getWindowProperty(String key) {
+        return window.getProperty(key);
     }
 
-    public File getAppDir() {
+    public final File getAppDir() {
         return appDir;
     }
 
-    public Locale getLocale() {
+    public final Locale getLocale() {
         return locale.getValue();
     }
 
-    public Property<Locale> localeProperty() {
+    public final Property<Locale> localeProperty() {
         return locale;
     }
 
-    public void setLocale(Locale locale) {
+    public final void setLocale(Locale locale) {
         this.locale.setValue(locale);
     }
+
+    /* Properties keys */
+    public static final String WORKSPACE_PATH = WORKSPACE + ".path";
+    public static final String WINDOW_WIDTH = WINDOW + ".width";
+    public static final String WINDOW_HEIGHT = WINDOW + ".height";
+    public static final String WINDOW_MAXIMIZED = WINDOW + ".maximized";
 }

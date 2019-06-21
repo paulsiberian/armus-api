@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.controlsfx.control.StatusBar?>
+<BorderPane fx:id="root" minHeight="400.0" minWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.paulsiberian.armus.controllers.MainController">
+    <top>
+        <MenuBar fx:id="menuBar" BorderPane.alignment="CENTER">
+            <menus>
+                <Menu fx:id="file" mnemonicParsing="false" text="%menubar.file">
+                    <items>
+                        <Menu fx:id="file_new" mnemonicParsing="false" text="%menubar.file.new">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#file_new_workspace" text="%menubar.file.new.workspace" />
+                            </items>
+                        </Menu>
+                        <SeparatorMenuItem />
+                        <MenuItem fx:id="file_exit" mnemonicParsing="false" onAction="#file_exit" text="%menubar.file.exit" />
+                    </items>
+                </Menu>
+                <Menu fx:id="edit" mnemonicParsing="false" text="%menubar.edit">
+                    <items>
+                        <MenuItem fx:id="edit_delete" mnemonicParsing="false" text="%menubar.edit.delete" />
+                    </items>
+                </Menu>
+                <Menu fx:id="help" mnemonicParsing="false" text="%menubar.help">
+                    <items>
+                        <MenuItem fx:id="help_about" mnemonicParsing="false" text="%menubar.help.about" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+    </top>
+    <bottom>
+        <HBox alignment="CENTER" BorderPane.alignment="CENTER">
+            <children>
+                <StatusBar HBox.hgrow="ALWAYS" />
+                <StatusBar HBox.hgrow="ALWAYS" />
+                <StatusBar HBox.hgrow="ALWAYS" />
+            </children>
+        </HBox>
+    </bottom>
+</BorderPane>
