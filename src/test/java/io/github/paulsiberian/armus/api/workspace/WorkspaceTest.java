@@ -4,7 +4,7 @@
 
 package io.github.paulsiberian.armus.api.workspace;
 
-import io.github.paulsiberian.armus.api.api.utils.WorkspaceUtil;
+import io.github.paulsiberian.armus.api.utils.WorkspaceUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 

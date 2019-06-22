@@ -10,7 +10,7 @@
   ~ Copyright (c) Храпунов П. Н., 2019.
   -->
 
-<Stage title="%window.title" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.paulsiberian.armus.controllers.MainController">
+<Stage title="%window.title" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.paulsiberian.armus.api.MainController">
     <scene>
         <Scene>
             <BorderPane>

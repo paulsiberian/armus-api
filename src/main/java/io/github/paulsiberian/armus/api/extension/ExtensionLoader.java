@@ -2,11 +2,11 @@
  * Copyright (c) Храпунов П. Н., 2019.
  */
 
-package io.github.paulsiberian.armus.api.api.extension;
+package io.github.paulsiberian.armus.api.extension;
 
-import io.github.paulsiberian.armus.api.api.utils.ExtensionUtil;
-import io.github.paulsiberian.armus.api.api.utils.WorkspaceUtil;
-import io.github.paulsiberian.armus.api.api.workspace.WorkspaceException;
+import io.github.paulsiberian.armus.api.utils.ExtensionUtil;
+import io.github.paulsiberian.armus.api.utils.WorkspaceUtil;
+import io.github.paulsiberian.armus.api.workspace.WorkspaceException;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
