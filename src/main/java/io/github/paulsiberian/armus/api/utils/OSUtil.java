@@ -2,7 +2,7 @@
  * Copyright (c) Храпунов П. Н., 2019.
  */
 
-package io.github.paulsiberian.armus.utils;
+package io.github.paulsiberian.armus.api.utils;
 
 public class OSUtil {
 

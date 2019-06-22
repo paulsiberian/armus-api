@@ -2,13 +2,11 @@
  * Copyright (c) Храпунов П. Н., 2019.
  */
 
-package io.github.paulsiberian.armus.controllers;
+package io.github.paulsiberian.armus.api;
 
-import io.github.paulsiberian.armus.GUIManager;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 
-public abstract class MainController implements Initializable {
+public class MainController {
 
     /* File menu */
 

@@ -13,12 +13,17 @@
     <version>1.0-SNAPSHOT</version>
     <name>ARMUS API Library</name>
     <url>https://github.com/paulsiberian/armus-api</url>
+    <organization>
+        <name>paulsiberian</name>
+        <url>https://paulsiberian.me</url>
+    </organization>
 
     <properties>
         <!--    Build properties    -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
+        <maven.build.timestamp.format>ddMMyy</maven.build.timestamp.format>
         <!--    Deploy properties    -->
         <github.global.server>github</github.global.server>
         <!--    Dependencies version    -->
@@ -53,7 +58,12 @@
             <artifactId>controlsfx</artifactId>
             <version>${controlsfx.version}</version>
         </dependency>
-
+        <!-- TxtMark -->
+        <dependency>
+            <groupId>com.github.rjeschke</groupId>
+            <artifactId>txtmark</artifactId>
+            <version>0.13</version>
+        </dependency>
     </dependencies>
 
     <distributionManagement>

@@ -2,9 +2,9 @@
  * Copyright (c) Храпунов П. Н., 2019.
  */
 
-package io.github.paulsiberian.armus.utils;
+package io.github.paulsiberian.armus.api.utils;
 
-import io.github.paulsiberian.armus.SettingsManager;
+import io.github.paulsiberian.armus.api.SettingsManager;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 
@@ -13,11 +13,11 @@ import java.util.ResourceBundle;
 
 public class GUIUtil {
 
-    private static ResourceBundle loadBundle(String fxml, Class c) {
+    public static ResourceBundle loadBundle(String fxml, Class c) {
         return ResourceBundle.getBundle(c.getPackageName() + '.' + fxml, SettingsManager.getInstance().getLocale());
     }
 
-    private static FXMLLoader fxmlLoader(String fxml, Class c) {
+    public static FXMLLoader fxmlLoader(String fxml, Class c) {
         return new FXMLLoader(c.getResource(fxml + ".fxml"), loadBundle(fxml, c));
     }
 

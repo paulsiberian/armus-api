@@ -2,12 +2,11 @@
  * Copyright (c) Храпунов П. Н., 2019.
  */
 
-package io.github.paulsiberian.armus;
+package io.github.paulsiberian.armus.api;
 
-import io.github.paulsiberian.armus.utils.GUIUtil;
+import io.github.paulsiberian.armus.api.utils.GUIUtil;
 import javafx.application.Platform;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -36,25 +35,60 @@ public class GUIManager {
         return (HBox) getRoot().getBottom();
     }
 
-    public final void init(final Class appClass, final Stage window) {
+    private void saveWindowWidth(Number width) {
+        SettingsManager.getInstance().setWindowProperty(SettingsManager.WINDOW_WIDTH, String.valueOf(width));
+    }
+
+    private void saveWindowHeight(Number height) {
+        SettingsManager.getInstance().setWindowProperty(SettingsManager.WINDOW_HEIGHT, String.valueOf(height));
+    }
+
+    private void saveWindowMaximized(boolean maximized) {
+        SettingsManager.getInstance().setWindowProperty(SettingsManager.WINDOW_MAXIMIZED, String.valueOf(maximized));
+    }
+
+    public final void init(final Class appClass) {
         this.appClass = appClass;
-        this.window = window;
-        this.window.setOnCloseRequest(windowEvent -> Platform.exit());
-        Scene scene = null;
         try {
-            scene = new Scene(GUIUtil.loadFXML("window", appClass));
+            var settings = SettingsManager.getInstance();
+            var curWidth = Double.parseDouble(settings.getWindowProperty(SettingsManager.WINDOW_WIDTH));
+            var curHeight = Double.parseDouble(settings.getWindowProperty(SettingsManager.WINDOW_HEIGHT));
+            var maximized = Boolean.parseBoolean(settings.getWindowProperty(SettingsManager.WINDOW_MAXIMIZED));
+            window = GUIUtil.loadStageFXML("window", appClass);
+            window.setMinWidth(600);
+            window.setMinHeight(400);
+            window.setWidth(curWidth);
+            window.setHeight(curHeight);
+            window.setMaximized(maximized);
+            window.setOnCloseRequest(windowEvent -> {
+                settings.save();
+                Platform.exit();
+            });
+            window.widthProperty().addListener((obsValue, oldValue, newValue) -> {
+                if (window.isMaximized()) {
+                    saveWindowWidth(oldValue);
+                } else {
+                    saveWindowWidth(newValue);
+                }
+            });
+            window.heightProperty().addListener((obsValue, oldValue, newValue) -> {
+                if (window.isMaximized()) {
+                    saveWindowHeight(oldValue);
+                } else {
+                    saveWindowHeight(newValue);
+                }
+            });
+            window.maximizedProperty().addListener((obsValue, oldValue, newValue) -> {
+                saveWindowMaximized(newValue);
+            });
         } catch (IOException e) {
+            System.out.println("Ошибка: не удалось создать окно");
             e.printStackTrace();
-        }
-        if (scene != null) {
-            this.window.setMinWidth(scene.getRoot().minWidth(0));
-            this.window.setMinHeight(scene.getRoot().minHeight(0));
-            this.window.setScene(scene);
         }
     }
 
     public final <T> T loadFXML(String fxml) throws IOException {
-        return GUIUtil.loadFXML(fxml, appClass);
+        return GUIUtil.fxmlLoader(fxml, appClass).load();
     }
 
     public final Stage getWindow() {

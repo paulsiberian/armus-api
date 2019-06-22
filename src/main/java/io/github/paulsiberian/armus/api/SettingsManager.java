@@ -2,11 +2,12 @@
  * Copyright (c) Храпунов П. Н., 2019.
  */
 
-package io.github.paulsiberian.armus;
+package io.github.paulsiberian.armus.api;
 
-import io.github.paulsiberian.armus.utils.OSUtil;
-import io.github.paulsiberian.armus.utils.WorkspaceUtil;
-import io.github.paulsiberian.armus.workspace.WorkspaceException;
+import com.github.rjeschke.txtmark.Processor;
+import io.github.paulsiberian.armus.api.utils.OSUtil;
+import io.github.paulsiberian.armus.api.utils.WorkspaceUtil;
+import io.github.paulsiberian.armus.api.workspace.WorkspaceException;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 
@@ -29,7 +30,10 @@ public class SettingsManager {
     private Properties workspace;
     private Properties window;
     private File appDir;
+    private File workspaceFile;
+    private File windowFile;
     private Property<Locale> locale;
+    private String apiInfo;
 
     private SettingsManager() {
     }
@@ -102,18 +106,40 @@ public class SettingsManager {
                 e.printStackTrace();
             }
         }
-        var workspaceFile = new File(appDir.getPath() + File.separator + WORKSPACE_SETTINGS_FILE_NAME);
+        workspaceFile = new File(appDir.getPath() + File.separator + WORKSPACE_SETTINGS_FILE_NAME);
         readOrCreate(workspace, workspaceFile);
-        var windowFile = new File(appDir.getPath() + File.separator + WINDOW_SETTINGS_FILE_NAME);
+        windowFile = new File(appDir.getPath() + File.separator + WINDOW_SETTINGS_FILE_NAME);
         readOrCreate(window, windowFile);
+        try {
+            apiInfo = Processor.process(SettingsManager.class.getResourceAsStream("info.md"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public final void save() {
+        try {
+            write(workspace, workspaceFile);
+            write(window, windowFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public final String getWorkspaceProperty(String key) {
         return workspace.getProperty(key);
     }
 
+    public final void setWorkspaceProperty(String key, String value) {
+        workspace.setProperty(key, value);
+    }
+
     public final String getWindowProperty(String key) {
         return window.getProperty(key);
+    }
+
+    public final void setWindowProperty(String key, String value) {
+        window.setProperty(key, value);
     }
 
     public final File getAppDir() {
@@ -130,6 +156,10 @@ public class SettingsManager {
 
     public final void setLocale(Locale locale) {
         this.locale.setValue(locale);
+    }
+
+    public String getApiInfo() {
+        return apiInfo;
     }
 
     /* Properties keys */

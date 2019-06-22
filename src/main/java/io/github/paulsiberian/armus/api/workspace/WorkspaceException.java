@@ -2,7 +2,7 @@
  * Copyright (c) Храпунов П. Н., 2019.
  */
 
-package io.github.paulsiberian.armus.workspace;
+package io.github.paulsiberian.armus.api.workspace;
 
 import java.io.File;
 import java.io.IOException;
