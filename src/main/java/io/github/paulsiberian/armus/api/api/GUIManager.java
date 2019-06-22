@@ -2,9 +2,9 @@
  * Copyright (c) Храпунов П. Н., 2019.
  */
 
-package io.github.paulsiberian.armus.api;
+package io.github.paulsiberian.armus.api.api;
 
-import io.github.paulsiberian.armus.api.utils.GUIUtil;
+import io.github.paulsiberian.armus.api.api.utils.GUIUtil;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.MenuBar;

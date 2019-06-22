@@ -2,8 +2,9 @@
  * Copyright (c) Храпунов П. Н., 2019.
  */
 
-package io.github.paulsiberian.armus.utils;
+package io.github.paulsiberian.armus.api.utils;
 
+import io.github.paulsiberian.armus.api.api.utils.WorkspaceUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

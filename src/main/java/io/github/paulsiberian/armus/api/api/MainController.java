@@ -2,7 +2,7 @@
  * Copyright (c) Храпунов П. Н., 2019.
  */
 
-package io.github.paulsiberian.armus.api;
+package io.github.paulsiberian.armus.api.api;
 
 import javafx.fxml.FXML;
 
