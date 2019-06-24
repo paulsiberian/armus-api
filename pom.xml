@@ -58,11 +58,27 @@
             <artifactId>controlsfx</artifactId>
             <version>${controlsfx.version}</version>
         </dependency>
+        <!-- Icon pack -->
+        <dependency>
+            <groupId>org.kordamp.ikonli</groupId>
+            <artifactId>ikonli-materialdesign-pack</artifactId>
+            <version>11.3.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.kordamp.ikonli</groupId>
+            <artifactId>ikonli-javafx</artifactId>
+            <version>11.3.4</version>
+        </dependency>
         <!-- TxtMark -->
         <dependency>
             <groupId>com.github.rjeschke</groupId>
             <artifactId>txtmark</artifactId>
             <version>0.13</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.5</version>
         </dependency>
     </dependencies>
 
