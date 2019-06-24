@@ -44,7 +44,7 @@ public class SettingsManager {
 
     private void createDefault(File file) throws IOException {
         if (file.getName().equals(WORKSPACE_SETTINGS_FILE_NAME)) {
-            workspace.setProperty(WORKSPACE_PATH, file.getPath() + File.separator + "Workspace");
+            workspace.setProperty(WORKSPACE_PATH, file.getParentFile().getPath() + File.separator + "Workspace");
             write(workspace, file);
         }
         if (file.getName().equals(WINDOW_SETTINGS_FILE_NAME)) {
