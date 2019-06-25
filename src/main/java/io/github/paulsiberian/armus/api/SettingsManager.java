@@ -4,10 +4,9 @@
 
 package io.github.paulsiberian.armus.api;
 
-import com.github.rjeschke.txtmark.Processor;
-import io.github.paulsiberian.armus.api.workspace.WorkspaceException;
 import io.github.paulsiberian.armus.api.utils.OSUtil;
 import io.github.paulsiberian.armus.api.utils.WorkspaceUtil;
+import io.github.paulsiberian.armus.api.workspace.WorkspaceException;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 
@@ -23,17 +22,20 @@ public class SettingsManager {
     private static final String EXT = ".properties";
     private static final String WINDOW = "window";
     private static final String WORKSPACE = "workspace";
+    private static final String HIBERNATE = "hibernate";
     private static final String WORKSPACE_SETTINGS_FILE_NAME = WORKSPACE + EXT;
     private static final String WINDOW_SETTINGS_FILE_NAME = WINDOW + EXT;
+    private static final String HIBERNATE_SETTINGS_FILE_NAME = HIBERNATE + EXT;
     private static final SettingsManager ourInstance = new SettingsManager();
 
     private Properties workspace;
     private Properties window;
+    private Properties hibernate;
     private File appDir;
     private File workspaceFile;
     private File windowFile;
+    private File databaseFile;
     private Property<Locale> locale;
-    private String apiInfo;
 
     private SettingsManager() {
     }
@@ -52,6 +54,17 @@ public class SettingsManager {
             window.setProperty(WINDOW_HEIGHT, "400");
             window.setProperty(WINDOW_MAXIMIZED, "false");
             write(window, file);
+        }
+        if (file.getName().equals(HIBERNATE_SETTINGS_FILE_NAME)) {
+            hibernate.setProperty(HIBERNATE_CONNECTION_DRIVER_CLASS, "org.h2.Driver");
+            hibernate.setProperty(HIBERNATE_CONNECTION_URL, "jdbc:h2:" + file.getParentFile().getPath() + File.separator + "database");
+            hibernate.setProperty(HIBERNATE_CONNECTION_USERNAME, "SA");
+            hibernate.setProperty(HIBERNATE_CONNECTION_PASSWORD, "");
+            hibernate.setProperty(HIBERNATE_DEFAULT_SCHEMA, "PUBLIC");
+            hibernate.setProperty(HIBERNATE_DIALECT, "org.hibernate.dialect.H2Dialect");
+            hibernate.setProperty(HIBERNATE_SHOW_SQL, "true");
+            hibernate.setProperty(HIBERNATE_HBM2DDL_AUTO, "create");
+            write(hibernate, file);
         }
     }
 
@@ -96,6 +109,7 @@ public class SettingsManager {
         locale = new SimpleObjectProperty<>(Locale.getDefault());
         workspace = new Properties();
         window = new Properties();
+        hibernate = new Properties();
         var userHomeDir = System.getProperty("user.home");
         var packageName = c.getPackageName();
         appDir = new File(userHomeDir + File.separator + appDataDir() + File.separator + packageName);
@@ -110,20 +124,30 @@ public class SettingsManager {
         readOrCreate(workspace, workspaceFile);
         windowFile = new File(appDir.getPath() + File.separator + WINDOW_SETTINGS_FILE_NAME);
         readOrCreate(window, windowFile);
-        try {
-            apiInfo = Processor.process(SettingsManager.class.getResourceAsStream("info.md"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        databaseFile = new File(appDir.getPath() + File.separator + HIBERNATE_SETTINGS_FILE_NAME);
+        readOrCreate(hibernate, databaseFile);
     }
 
     public final void save() {
         try {
+            var hbm2ddlAuto = hibernate.getProperty(HIBERNATE_HBM2DDL_AUTO);
+            if (hbm2ddlAuto.equals("create") || hbm2ddlAuto.equals("create-drop")) {
+                hibernate.setProperty(HIBERNATE_HBM2DDL_AUTO, "update");
+            }
+            write(hibernate, databaseFile);
             write(workspace, workspaceFile);
             write(window, windowFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public final String getHibernateProperty(String key) {
+        return hibernate.getProperty(key);
+    }
+
+    public final void setHibernateProperty(String key, String value) {
+        hibernate.setProperty(key, value);
     }
 
     public final String getWorkspaceProperty(String key) {
@@ -142,6 +166,18 @@ public class SettingsManager {
         window.setProperty(key, value);
     }
 
+    public Properties getWorkspaceProperties() {
+        return workspace;
+    }
+
+    public Properties getWindowProperties() {
+        return window;
+    }
+
+    public Properties getDatabaseProperties() {
+        return hibernate;
+    }
+
     public final File getAppDir() {
         return appDir;
     }
@@ -158,13 +194,18 @@ public class SettingsManager {
         this.locale.setValue(locale);
     }
 
-    public String getApiInfo() {
-        return apiInfo;
-    }
-
     /* Properties keys */
     public static final String WORKSPACE_PATH = WORKSPACE + ".path";
+    public static final String WORKSPACE_LAST_DIR = WORKSPACE + ".last_dir";
     public static final String WINDOW_WIDTH = WINDOW + ".width";
     public static final String WINDOW_HEIGHT = WINDOW + ".height";
     public static final String WINDOW_MAXIMIZED = WINDOW + ".maximized";
+    public static final String HIBERNATE_CONNECTION_DRIVER_CLASS = HIBERNATE + ".connection.driver_class";
+    public static final String HIBERNATE_CONNECTION_URL = HIBERNATE + ".connection.url";
+    public static final String HIBERNATE_CONNECTION_USERNAME = HIBERNATE + ".connection.username";
+    public static final String HIBERNATE_CONNECTION_PASSWORD = HIBERNATE + ".connection.password";
+    public static final String HIBERNATE_DEFAULT_SCHEMA = HIBERNATE + ".default_schema";
+    public static final String HIBERNATE_DIALECT = HIBERNATE + ".dialect";
+    public static final String HIBERNATE_SHOW_SQL = HIBERNATE + ".show_sql";
+    public static final String HIBERNATE_HBM2DDL_AUTO = HIBERNATE + ".hbm2ddl.auto";
 }

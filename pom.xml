@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  ~ Copyright (c) Храпунов П. Н., 2019.
-  -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -10,7 +7,7 @@
 
     <groupId>io.github.paulsiberian.armus</groupId>
     <artifactId>armus-api</artifactId>
-    <version>1.0.0</version>
+    <version>1.0-SNAPSHOT</version>
     <name>ARMUS API Library</name>
     <url>https://github.com/paulsiberian/armus-api</url>
     <organization>
@@ -28,8 +25,9 @@
         <github.global.server>github</github.global.server>
         <!--    Dependencies version    -->
         <junit-jupiter.version>5.5.0-RC1</junit-jupiter.version>
-        <openjfx.version>11.0.2</openjfx.version>
+        <openjfx.version>12.0.1</openjfx.version>
         <controlsfx.version>11.0.0</controlsfx.version>
+        <ikonli.version>11.3.4</ikonli.version>
         <!--    Plugins version    -->
         <maven-deploy-plugin>3.0.0-M1</maven-deploy-plugin>
         <site-maven-plugin.version>0.12</site-maven-plugin.version>
@@ -53,32 +51,34 @@
             <artifactId>javafx-fxml</artifactId>
             <version>${openjfx.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.controlsfx</groupId>
-            <artifactId>controlsfx</artifactId>
-            <version>${controlsfx.version}</version>
-        </dependency>
         <!-- Icon pack -->
         <dependency>
             <groupId>org.kordamp.ikonli</groupId>
             <artifactId>ikonli-materialdesign-pack</artifactId>
-            <version>11.3.4</version>
+            <version>${ikonli.version}</version>
         </dependency>
         <dependency>
             <groupId>org.kordamp.ikonli</groupId>
             <artifactId>ikonli-javafx</artifactId>
-            <version>11.3.4</version>
-        </dependency>
-        <!-- TxtMark -->
-        <dependency>
-            <groupId>com.github.rjeschke</groupId>
-            <artifactId>txtmark</artifactId>
-            <version>0.13</version>
+            <version>${ikonli.version}</version>
         </dependency>
         <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.5</version>
+            <groupId>org.kordamp.ikonli</groupId>
+            <artifactId>ikonli-hawconsfilled-pack</artifactId>
+            <version>${ikonli.version}</version>
+        </dependency>
+        <!-- Hibernate -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.4.3.Final</version>
+        </dependency>
+        <!-- H2 -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.199</version>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 

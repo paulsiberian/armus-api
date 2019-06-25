@@ -5,6 +5,7 @@
 package io.github.paulsiberian.armus.api.filesystem;
 
 import javafx.scene.control.TreeItem;
+import javafx.scene.paint.Paint;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.File;
@@ -15,17 +16,24 @@ public class DirTreeItem extends TreeItem<String> implements IFileItem {
     public DirTreeItem(File file) {
         super(file.getName());
         this.file = file;
+        var color = Paint.valueOf("#efa94a");
 
         expandedProperty().addListener(((observableValue, aBoolean, t1) -> {
+            var icon = new FontIcon();
+            icon.setIconColor(color);
             if (t1) {
-                setGraphic(new FontIcon(OPENED_FOLDER_ICON));
+                icon.setIconLiteral(OPENED_FOLDER_ICON);
+                setGraphic(icon);
             } else {
-                setGraphic(new FontIcon(CLOSED_FOLDER_ICON));
+                icon.setIconLiteral(CLOSED_FOLDER_ICON);
+                setGraphic(icon);
             }
         }));
 
         if (file.isDirectory() && !file.isHidden()) {
-            setGraphic(new FontIcon(CLOSED_FOLDER_ICON));
+            var icon = new FontIcon(CLOSED_FOLDER_ICON);
+            icon.setIconColor(color);
+            setGraphic(icon);
             var files = file.listFiles();
             if (files != null) {
                 for (var f : files) {
@@ -35,23 +43,6 @@ public class DirTreeItem extends TreeItem<String> implements IFileItem {
                 }
             }
         }
-
-/*
-        addEventHandler(TreeItem.branchExpandedEvent(), (EventHandler) event -> {
-            var source = (DirTreeItem) event.getSource();
-            var sourceFile = source.getFile();
-            if (sourceFile.isDirectory() && source.isExpanded()) {
-                source.setGraphic(CLOSED_FOLDER_ICON);
-            }
-        });
-
-        addEventHandler(TreeItem.branchCollapsedEvent(), (EventHandler) event -> {
-            var source = (DirTreeItem) event.getSource();
-            var sourceFile = source.getFile();
-            if (sourceFile.isDirectory() && !source.isExpanded()) {
-                source.setGraphic(CLOSED_FOLDER_ICON);
-            }
-        });*/
     }
 
     @Override
@@ -59,6 +50,6 @@ public class DirTreeItem extends TreeItem<String> implements IFileItem {
         return file;
     }
 
-    public final static String OPENED_FOLDER_ICON = "mdi-folder-outline";
-    public final static String CLOSED_FOLDER_ICON = "mdi-folder";
+    private final static String OPENED_FOLDER_ICON = "mdi-folder-outline";
+    private final static String CLOSED_FOLDER_ICON = "mdi-folder";
 }

@@ -11,7 +11,6 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import org.controlsfx.control.StatusBar;
 
 import java.io.IOException;
 
@@ -99,27 +98,27 @@ public class GUIManager {
         return (MenuBar) getRoot().getTop();
     }
 
-    public final StatusBar getStatusBarLeft() {
-        return (StatusBar) getStatusBar().getChildren().get(0);
+    public final Node getStatusBarLeft() {
+        return getStatusBar().getChildren().get(0);
     }
 
-    public final void setStatusBarLeft(StatusBar node) {
+    public final void setStatusBarLeft(Node node) {
         getStatusBar().getChildren().set(0, node);
     }
 
-    public final StatusBar getStatusBarCenter() {
-        return (StatusBar) getStatusBar().getChildren().get(1);
+    public final Node getStatusBarCenter() {
+        return getStatusBar().getChildren().get(1);
     }
 
-    public final void setStatusBarCenter(StatusBar node) {
+    public final void setStatusBarCenter(Node node) {
         getStatusBar().getChildren().set(1, node);
     }
 
-    public final StatusBar getStatusBarRight() {
-        return (StatusBar) getStatusBar().getChildren().get(2);
+    public final Node getStatusBarRight() {
+        return getStatusBar().getChildren().get(2);
     }
 
-    public final void setStatusBarRight(StatusBar node) {
+    public final void setStatusBarRight(Node node) {
         getStatusBar().getChildren().set(2, node);
     }
 
