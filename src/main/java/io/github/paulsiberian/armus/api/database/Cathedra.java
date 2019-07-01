@@ -16,7 +16,7 @@ public class Cathedra {
     private String name;
     private String description;
     private Institute institute;
-    private List employees;
+    private List<Employee> employees;
 
     public Cathedra() {
     }
@@ -86,11 +86,8 @@ public class Cathedra {
 
     @Override
     public String toString() {
-        return "Cathedra{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", institute=" + institute +
-                '}';
+        return name +
+                " (институт " + institute +
+                ')';
     }
 }

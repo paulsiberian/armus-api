@@ -15,7 +15,7 @@ public class Institute {
     private Long id;
     private String name;
     private String description;
-    private List cathedras;
+    private List<Cathedra> cathedras;
 
     public Institute() {
     }
@@ -74,10 +74,6 @@ public class Institute {
 
     @Override
     public String toString() {
-        return "Institute{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                '}';
+        return name;
     }
 }

@@ -8,26 +8,26 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "PHONES", schema = "PUBLIC", catalog = "DATABASE")
-public class Phone {
+@Table(name = "STUDENTS", schema = "PUBLIC", catalog = "DATABASE")
+public class Student {
 
     private Long id;
-    private String value;
     private Person person;
+    private Group group;
 
-    public Phone() {
+    public Student() {
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public void setValue(String value) {
-        this.value = value;
-    }
-
     public void setPerson(Person person) {
         this.person = person;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
     }
 
     @Id
@@ -36,34 +36,37 @@ public class Phone {
         return id;
     }
 
-    @Column(name = "VALUE")
-    public String getValue() {
-        return value;
-    }
-
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "PERSON_ID", referencedColumnName = "ID")
     public Person getPerson() {
         return person;
+    }
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "GROUP_ID", referencedColumnName = "ID")
+    public Group getGroup() {
+        return group;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Phone phone1 = (Phone) o;
-        return getId().equals(phone1.getId()) &&
-                getValue().equals(phone1.getValue()) &&
-                getPerson().equals(phone1.getPerson());
+        Student student = (Student) o;
+        return Objects.equals(id, student.id) &&
+                Objects.equals(person, student.person) &&
+                Objects.equals(group, student.group);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getValue(), getPerson());
+        return Objects.hash(id, person, group);
     }
 
     @Override
     public String toString() {
-        return value + ' ' + person;
+        return person +
+                " (группа " + group +
+                ')';
     }
 }

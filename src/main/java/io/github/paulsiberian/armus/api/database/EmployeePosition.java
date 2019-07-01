@@ -15,7 +15,7 @@ public class EmployeePosition {
     private Long id;
     private String position;
     private Integer workloadStandad;
-    private List employees;
+    private List<Employee> employees;
 
     public EmployeePosition() {
     }
@@ -77,10 +77,6 @@ public class EmployeePosition {
 
     @Override
     public String toString() {
-        return "EmployeePosition{" +
-                "id=" + id +
-                ", position='" + position + '\'' +
-                ", workloadStandad=" + workloadStandad +
-                '}';
+        return position;
     }
 }

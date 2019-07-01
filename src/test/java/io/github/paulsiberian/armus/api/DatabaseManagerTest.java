@@ -14,6 +14,7 @@ class DatabaseManagerTest {
     private Institute institute;
     private Cathedra cathedra;
     private Employee employee;
+    private Person person;
     private Phone phone;
     private Email email;
     private EmployeePosition position;
@@ -31,19 +32,22 @@ class DatabaseManagerTest {
         cathedra.setDescription("Кафедра автоматизации и информационных систем");
         cathedra.setInstitute(institute);
 
+        person = new Person();
+        person.setSurname("Ляховец");
+        person.setName("Михаил");
+        person.setPatronymic("Васильевич");
+
         employee = new Employee();
-        employee.setSurname("Ляховец");
-        employee.setName("Михаил");
-        employee.setPatronymic("Васильевич");
+        employee.setPerson(person);
         employee.setCathedra(cathedra);
 
         phone = new Phone();
         phone.setValue("+7923AAABBCC");
-        phone.setEmployee(employee);
+        phone.setPerson(person);
 
         email = new Email();
         email.setValue("layhovets@mail.ru");
-        email.setEmployee(employee);
+        email.setPerson(person);
 
         position = new EmployeePosition();
         position.setPosition("Заведующий кафедрой, учёный секретарь кафедры (кандидат наук)");
@@ -62,6 +66,7 @@ class DatabaseManagerTest {
             session.getTransaction().begin();
             session.save(institute);
             session.save(cathedra);
+            session.save(person);
             session.save(employee);
             session.save(phone);
             session.save(email);
@@ -98,7 +103,7 @@ class DatabaseManagerTest {
             position.setWorkloadStandad(600);
             session.update(position);
             var employee = session.get(Employee.class, 1L);
-            System.out.println(employee.fullname() + " " + employee.getPosition());
+            System.out.println(employee.getPerson().fullname() + " " + employee.getPosition());
             session.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();

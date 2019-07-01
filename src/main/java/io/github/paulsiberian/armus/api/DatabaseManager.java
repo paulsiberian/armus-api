@@ -25,8 +25,11 @@ public class DatabaseManager {
                         .addAnnotatedClass(Email.class)
                         .addAnnotatedClass(Employee.class)
                         .addAnnotatedClass(EmployeePosition.class)
+                        .addAnnotatedClass(Group.class)
                         .addAnnotatedClass(Institute.class)
-                        .addAnnotatedClass(Phone.class);
+                        .addAnnotatedClass(Person.class)
+                        .addAnnotatedClass(Phone.class)
+                        .addAnnotatedClass(Student.class);
                 serviceRegistry = new StandardServiceRegistryBuilder().applySettings(config.getProperties()).build();
                 sessionFactory =config.buildSessionFactory(serviceRegistry);
             }

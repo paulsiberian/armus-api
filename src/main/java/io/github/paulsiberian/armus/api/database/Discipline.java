@@ -14,7 +14,8 @@ public class Discipline {
 
     private Long id;
     private String name;
-    private List employees;
+    private List<Employee> employees;
+    private List<Group> groups;
 
     public Discipline() {
     }
@@ -29,6 +30,10 @@ public class Discipline {
 
     public void setEmployees(List<Employee> employees) {
         this.employees = employees;
+    }
+
+    public void setGroups(List<Group> groups) {
+        this.groups = groups;
     }
 
     @Id
@@ -50,25 +55,32 @@ public class Discipline {
         return employees;
     }
 
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "GROUPS_DISCIPLINES",
+            joinColumns = @JoinColumn(name = "DISCIPLINE_ID"),
+            inverseJoinColumns = @JoinColumn(name = "GROUP_ID"))
+    public List<Group> getGroups() {
+        return groups;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Discipline that = (Discipline) o;
-        return getId().equals(that.getId()) &&
-                getName().equals(that.getName());
+        return Objects.equals(id, that.id) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(employees, that.employees) &&
+                Objects.equals(groups, that.groups);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName());
+        return Objects.hash(id, name, employees, groups);
     }
 
     @Override
     public String toString() {
-        return "Discipline{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+        return name;
     }
 }

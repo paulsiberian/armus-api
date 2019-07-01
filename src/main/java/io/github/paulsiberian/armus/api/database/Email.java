@@ -13,7 +13,7 @@ public class Email {
 
     private Long id;
     private String value;
-    private Employee employee;
+    private Person person;
 
     public Email() {
     }
@@ -26,8 +26,8 @@ public class Email {
         this.value = value;
     }
 
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
+    public void setPerson(Person person) {
+        this.person = person;
     }
 
     @Id
@@ -42,9 +42,9 @@ public class Email {
     }
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "EMPLOYEE_ID", referencedColumnName = "ID")
-    public Employee getEmployee() {
-        return employee;
+    @JoinColumn(name = "PERSON_ID", referencedColumnName = "ID")
+    public Person getPerson() {
+        return person;
     }
 
     @Override
@@ -54,20 +54,16 @@ public class Email {
         Email email = (Email) o;
         return getId().equals(email.getId()) &&
                 getValue().equals(email.getValue()) &&
-                getEmployee().equals(email.getEmployee());
+                getPerson().equals(email.getPerson());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getValue(), getEmployee());
+        return Objects.hash(getId(), getValue(), getPerson());
     }
 
     @Override
     public String toString() {
-        return "Email{" +
-                "id=" + id +
-                ", value='" + value + '\'' +
-                ", employee=" + employee +
-                '}';
+        return value + ' ' + person;
     }
 }
