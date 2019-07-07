@@ -16,6 +16,7 @@ public class Institute {
     private String name;
     private String description;
     private List<Cathedra> cathedras;
+    private List<Group> groups;
 
     public Institute() {
     }
@@ -34,6 +35,10 @@ public class Institute {
 
     public void setCathedras(List<Cathedra> cathedras) {
         this.cathedras = cathedras;
+    }
+
+    public void setGroups(List<Group> groups) {
+        this.groups = groups;
     }
 
     @Id
@@ -57,19 +62,26 @@ public class Institute {
         return cathedras;
     }
 
+    @OneToMany(mappedBy = "institute")
+    public List<Group> getGroups() {
+        return groups;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Institute institute = (Institute) o;
-        return getId().equals(institute.getId()) &&
-                getName().equals(institute.getName()) &&
-                getDescription().equals(institute.getDescription());
+        return Objects.equals(id, institute.id) &&
+                Objects.equals(name, institute.name) &&
+                Objects.equals(description, institute.description) &&
+                Objects.equals(cathedras, institute.cathedras) &&
+                Objects.equals(groups, institute.groups);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getDescription());
+        return Objects.hash(id, name, description, cathedras, groups);
     }
 
     @Override

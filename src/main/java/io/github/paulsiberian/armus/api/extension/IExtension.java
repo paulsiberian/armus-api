@@ -6,5 +6,12 @@ package io.github.paulsiberian.armus.api.extension;
 
 public interface IExtension {
     void start();
-    boolean init();
+    default boolean init() {
+        try {
+            start();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
