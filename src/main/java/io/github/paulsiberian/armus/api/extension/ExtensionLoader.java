@@ -12,17 +12,31 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
+/**
+ * Класс предназначенный для загрузки расширений
+ * @param <T> - потомок {@link IExtension}
+ */
 public class ExtensionLoader<T extends IExtension> {
+    /** Неупорядоченная коллекция расширений */
     private Set<T> extensions;
+    /** Главные классы расширений (ключ - главный класс, значение - свойства) */
     private Map<Class<?>, Properties> classes;
+    /** Корневая директория с расширениями */
     private File root;
 
+    /**
+     * Конструктор
+     * @param root - корневая директория с расширениями
+     */
     public ExtensionLoader(File root) {
         this.root = root;
         extensions = new HashSet<>();
         classes = new HashMap<>();
     }
 
+    /**
+     * Метод загрузки расширений из корневой директории с расширениями
+     */
     public void load() {
         if (root.exists() && root.isDirectory()) {
             var jars = ExtensionUtil.getJarFiles(root);
@@ -40,6 +54,9 @@ public class ExtensionLoader<T extends IExtension> {
         }
     }
 
+    /**
+     * Метод инициализации активных загруженных расширений
+     */
     public void enableExtensions() {
         classes.forEach((c, p) -> {
             if (ExtensionUtil.isActivated(p, root)) {
@@ -60,14 +77,26 @@ public class ExtensionLoader<T extends IExtension> {
         System.out.println("Загружено расширений: " + extensions.size());
     }
 
+    /**
+     * Метод получения расширений
+     * @return неупорядоченная коллекция расширений
+     */
     public Set<T> getExtensions() {
         return extensions;
     }
 
+    /**
+     * Метод получения главных классов расширений
+     * @return ключ - главный класс, значение - свойства
+     */
     public Map<Class<?>, Properties> getClasses() {
         return classes;
     }
 
+    /**
+     * Метод получения корневой директории с расширениями
+     * @return корневая директория с расширениями
+     */
     public File getRoot() {
         return root;
     }

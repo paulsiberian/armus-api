@@ -15,16 +15,30 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.zip.ZipFile;
 
+/**
+ * Класс состоит из ститачных методов для работы с расширениями
+ * @author paulsiberian
+ */
 public class ExtensionUtil {
     private static final String EXT = ".properties";
     private static final String EXTENSION = "extension";
     private static final String EXTENSION_LIST_FILE_NAME = EXTENSION + "_list" + EXT;
     private static final String EXTENSION_PROPERTIES_FILE_NAME = EXTENSION + EXT;
 
+    /**
+     * Метод получает полное имя главного класса из свойств расширения по ключу {@link #MAIN_CLASS}
+     * @param p - свойства расширения
+     * @return полное имя главного класса расширения
+     */
     private static String getMainClass(Properties p) {
         return p.getProperty(MAIN_CLASS);
     }
 
+    /**
+     * Метод получает свойства расширения
+     * @param jar - Jar-файл расширения
+     * @return свойства расширения
+     */
     public static Properties getExtensionProperties(File jar) {
         try {
             var zipJar = new ZipFile(jar);
@@ -39,10 +53,21 @@ public class ExtensionUtil {
         }
     }
 
+    /**
+     * Метод получает массив Jar-файлов из директории с расширениями
+     * @param root - директория с расширениями
+     * @return массив Jar-файлов
+     */
     public static File[] getJarFiles(File root) {
         return root.listFiles(pathname -> pathname.isFile() && pathname.getName().endsWith(".jar"));
     }
 
+    /**
+     * Метод активации расширения
+     * @param p - свойства расширения
+     * @param b - true/false
+     * @param f - файл свойств со списком расширений
+     */
     public static void activate(Properties p, boolean b, File f) {
         var mainClass = getMainClass(p);
         var properties = new Properties();
@@ -54,6 +79,12 @@ public class ExtensionUtil {
         }
     }
 
+    /**
+     * Метод проверяет, активировано ли расширение
+     * @param p - свойства расширения
+     * @param root - директория с Jar-файлами расширений
+     * @return true/false
+     */
     public static boolean isActivated(Properties p, File root) {
         var mainClass = getMainClass(p);
         var file = new File(root.getPath() + File.separator + EXTENSION_LIST_FILE_NAME);
@@ -77,6 +108,12 @@ public class ExtensionUtil {
         return false;
     }
 
+    /**
+     * Метод получает главный класс расширения и его свойства
+     * @param jar - Jar-файл расширения
+     * @param loaderClass - загрузчик классов
+     * @return ключ - главный класс расширения, значение - свойства расширения
+     */
     public static Map<Class<?>, Properties> loadMainClass(File jar, Class<?> loaderClass) {
         var map = new HashMap<Class<?>, Properties>();
         String mainClass = null;
@@ -103,12 +140,19 @@ public class ExtensionUtil {
         return map;
     }
 
-    /* Properties keys */
+    /* Ключи свойств расширения */
+    /** Ключ свойства {@value #NAME} - название расширения */
     public static final String NAME = EXTENSION + ".name";
+    /** Ключ свойства {@value #DESCRIPTION} - описание расширения */
     public static final String DESCRIPTION = EXTENSION + ".description";
-    public static final String VERSION = EXTENSION + ".version";
+    /** Ключ свойства {@value #URL} - ссылка на страницу расширения */
     public static final String URL = EXTENSION + ".url";
+    /** Ключ свойства {@value #AUTHOR_NAME} - автор расширения */
     public static final String AUTHOR_NAME = EXTENSION + ".author.name";
+    /** Ключ свойства {@value #AUTHOR_EMAIL} - e-mail автора расширения */
     public static final String AUTHOR_EMAIL = EXTENSION + ".author.email";
+    /** Ключ свойства {@value #MAIN_CLASS} - полное имя главного класса расширения */
     public static final String MAIN_CLASS = EXTENSION + ".main-class";
+    /** Ключ свойства {@value #VERSION} - версия расширения */
+    public static final String VERSION = EXTENSION + ".version";
 }

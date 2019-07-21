@@ -16,8 +16,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+/**
+ * Класс состоит из статичных методов для работы с файлами и директориями рабочей директории учёного секретаря выпускающей кафедры
+ */
 public class WorkspaceUtil {
 
+    /**
+     * Метод поиска файлов по имени
+     * @param s - строка для поиска
+     * @param dir - директория, где ведётся поиск
+     * @return поток путей найденных файлов
+     * @throws IOException если произошла ошибка при переборе файлов в директории
+     */
     private static Stream<Path> findPathStream(String s, File dir) throws IOException {
         var result = new ArrayList<File>();
         var path = Paths.get(dir.getPath());
@@ -27,12 +37,28 @@ public class WorkspaceUtil {
         });
     }
 
+    /**
+     * Метод поиска файлов по имени
+     * @param s - строка для поиска
+     * @param dir - директория, где ведётся поиск
+     * @return список найденных файлов
+     * @throws IOException если произошла ошибка при переборе файлов в директории
+     */
     private static List<File> findFileList(String s, File dir) throws IOException {
         var result = new ArrayList<File>();
         findPathStream(s, dir).forEach(p -> result.add(p.toFile()));
         return result;
     }
 
+    /**
+     * Метод получения списка файлов или директорий из родительской директории
+     * @param dir - родительская директория
+     * @param isDirs - true, если необходимо получить список директорий / false, если необходимо получить список файлов
+     * @return список файлов или директорий
+     * @throws IOException если произошла ошибка получении списка файлов
+     * @see #getFileList(File)
+     * @see #getDirList(File)
+     */
     private static List<File> getFileList(File dir, boolean isDirs) throws IOException {
         if (dir.exists()) {
             var result = new ArrayList<File>();
@@ -50,14 +76,34 @@ public class WorkspaceUtil {
         }
     }
 
+    /**
+     * Метод получения списка файлов из родительской директории
+     * @param dir - родительская директория
+     * @return список файлов
+     * @throws IOException если произошла ошибка получении списка файлов
+     * @see #findFileList(String, File)
+     */
     private static List<File> getFileList(File dir) throws IOException {
         return getFileList(dir, false);
     }
 
+    /**
+     * Метод получения списка директорий из родительской директории
+     * @param dir - родительская директория
+     * @return список директорий
+     * @throws IOException если произошла ошибка получении списка директорий
+     * @see #findFileList(String, File)
+     */
     private static List<File> getDirList(File dir) throws IOException {
         return getFileList(dir, true);
     }
 
+    /**
+     * Метод создающий файл
+     * @param f - файл
+     * @return поток вывода файла
+     * @throws IOException если произошла ошибка при создании файла
+     */
     private static FileOutputStream createFile(File f) throws IOException {
         if (f.createNewFile()) {
             System.out.println("Файл " + f.getPath() + " создан.");
@@ -67,6 +113,12 @@ public class WorkspaceUtil {
         }
     }
 
+    /**
+     * Метод создающий копию директории
+     * @param src - исходная директория
+     * @param dest - новая директория
+     * @throws IOException если произошла ошибка при копировании
+     */
     private static void cpDir(File src, File dest) throws IOException {
         Files.walk(src.toPath()).forEach(s -> {
             try {

@@ -5,15 +5,10 @@
 package io.github.paulsiberian.armus.api.utils;
 
 import io.github.paulsiberian.armus.api.SettingsManager;
-import io.github.paulsiberian.armus.api.filesystem.DirTreeItem;
 import io.github.paulsiberian.armus.api.filesystem.FileInfo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.paint.Paint;
-import org.kordamp.ikonli.Ikon;
-import org.kordamp.ikonli.Ikonli;
 import org.kordamp.ikonli.javafx.FontIcon;
-import org.kordamp.ikonli.materialdesign.MaterialDesign;
 
 import java.awt.*;
 import java.io.File;
@@ -26,8 +21,16 @@ import java.nio.file.attribute.FileTime;
 import java.text.DateFormat;
 import java.util.ArrayList;
 
+/**
+ * Класс состоит из статичных методов для работы с файлами, директориями и внешними программами
+ */
 public class FileUtil {
 
+    /**
+     * Метод получения расширения файла
+     * @param file - файл
+     * @return расширение файла
+     */
     public static String getFileExtension(File file) {
         if (file.isFile()) {
             var name = file.getName().toLowerCase();
@@ -41,6 +44,12 @@ public class FileUtil {
         return null;
     }
 
+    /**
+     * Метод получения иконки файла или директории
+     * @param file - файл или директория
+     * @param iconSize - требуемый размер иконки
+     * @return иконка
+     */
     public static FontIcon getIcon(File file, int iconSize) {
         var icon = new FontIcon("mdi-file:" + iconSize + ":#e8bc90");
         if (file.isDirectory()) {
@@ -59,6 +68,11 @@ public class FileUtil {
         return icon;
     }
 
+    /**
+     * Метод получения объектов, содержащих информацию о файлах и директориях и сами файлы и директории
+     * @param file - родительская директория
+     * @return список объектов с информацией о файлах и директориях
+     */
     public static ObservableList<FileInfo> getFiles(File file) {
         var list = new ArrayList<FileInfo>();
         if (file.isDirectory()) {
@@ -72,6 +86,11 @@ public class FileUtil {
         return FXCollections.observableArrayList(list);
     }
 
+    /**
+     * Метод получения размера файла в байтах, килобайтах, мегабайтах ил гигабайтах
+     * @param file - файл
+     * @return строка со значением размера файла
+     */
     public static String getSize(File file) {
         var string = "";
         if (file.isFile()) {
@@ -98,11 +117,20 @@ public class FileUtil {
         return string;
     }
 
+    /**
+     * Метод получения даты создания или изменения файла в локальном формате даты и времени
+     * @param fileTime - атрибут метки времени файла
+     * @return строка с датой и временем
+     */
     public static String getDate(FileTime fileTime) {
         var format = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, SettingsManager.getInstance().getLocale());
         return format.format(fileTime.toMillis());
     }
 
+    /**
+     * Метод открывает файл в соответствующей его расширению программе
+     * @param file - файл
+     */
     public static void exec(File file) {
         var ext = getFileExtension(file);
         if (OSUtil.isNix()) {
@@ -112,6 +140,11 @@ public class FileUtil {
         }
     }
 
+    /**
+     * Метод открывает файл в соответствующей его расширению программе на Linux
+     * @param command - команда для запуска
+     * @param file - файл
+     */
     private static void execNix(String command, File file) {
         try {
             var process = new ProcessBuilder("libreoffice",  command, file.getName());
@@ -128,6 +161,10 @@ public class FileUtil {
     private static void execMac(File file) {
     }
 
+    /**
+     * Метод открывает ссылку в системном web-браузере
+     * @param uri - URI ссылки
+     */
     public static void openLink(String uri) {
         var desktop = Desktop.getDesktop();
         if (desktop.isSupported(Desktop.Action.BROWSE)) {
