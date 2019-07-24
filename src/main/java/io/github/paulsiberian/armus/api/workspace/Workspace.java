@@ -10,9 +10,18 @@ import java.io.File;
 import java.io.IOException;
 import java.util.stream.Stream;
 
+/**
+ * Класс объекта рабочей области (директории) учёного секретаря выпускающей кафедры
+ */
 public class Workspace implements IWorkspace {
     private File root;
 
+    /**
+     * Конструктор
+     * @param root - корневая директория рабочей области
+     * @throws WorkspaceException если возникает ошибка при открытии или создании корневой директории
+     * @see #Workspace(String)
+     */
     public Workspace(File root) throws WorkspaceException {
         if (root.exists()) {
             if (root.isDirectory()) {
@@ -25,6 +34,12 @@ public class Workspace implements IWorkspace {
         }
     }
 
+    /**
+     * Конструктор
+     * @param path - абсолютный путь корневой директории рабочей области
+     * @throws WorkspaceException если возникает ошибка при открытии или создании корневой директории
+     * @see #Workspace(File)
+     */
     public Workspace(String path) throws WorkspaceException {
         this(new File(path));
     }

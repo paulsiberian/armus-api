@@ -129,30 +129,80 @@ public class WorkspaceUtil {
         });
     }
 
+    /**
+     * Метод поиска файлов по имени
+     * @param s - строка для поиска
+     * @param dir - директория, где ведётся поиск
+     * @return массив найденных файлов
+     * @throws IOException если произошла ошибка при переборе файлов
+     * @see #findFileStream(String, File)
+     */
     public static File[] findFileArray(String s, File dir) throws IOException {
         return findFileList(s, dir).toArray(new File[0]);
     }
 
+    /**
+     * Метод поиска файлов по имени
+     * @param s - строка для поиска
+     * @param dir - директория, где ведётся поиск
+     * @return поток найденных файлов
+     * @throws IOException если произошла ошибка при переборе файлов
+     * @see #findFileArray(String, File)
+     */
     public static Stream<File> findFileStream(String s, File dir) throws IOException {
         return findFileList(s, dir).stream();
     }
 
+    /**
+     * Метод получения файлов из родительской директории
+     * @param dir - родительская директория
+     * @return массив файлов
+     * @throws IOException если произошла ошибка при получении списка файлов
+     * @see #getFileStream(File)
+     */
     public static File[] getFileArray(File dir) throws IOException {
         return getFileList(dir).toArray(new File[0]);
     }
 
+    /**
+     * Метод получения файлов из родительской директории
+     * @param dir - родительская директория
+     * @return поток файлов
+     * @throws IOException если произошла ошибка при получении списка файлов
+     * @see #getFileArray(File)
+     */
     public static Stream<File> getFileStream(File dir) throws IOException {
         return getFileList(dir).stream();
     }
 
+    /**
+     * Метод получения директорий из родительской директории
+     * @param dir - родительская директория
+     * @return массив директорий
+     * @throws IOException если произошла ошибка при получении списка директорий
+     * @see #getDirStream(File)
+     */
     public static File[] getDirArray(File dir) throws IOException {
         return getDirList(dir).toArray(new File[0]);
     }
 
+    /**
+     * Метод получения директорий из родительской директории
+     * @param dir - родительская директория
+     * @return поток директорий
+     * @throws IOException если произошла ошибка при получении списка директорий
+     * @see #getDirArray(File)
+     */
     public static Stream<File> getDirStream(File dir) throws IOException {
         return getDirList(dir).stream();
     }
 
+    /**
+     * Метод создающий директорию
+     * @param dir - новая директория
+     * @throws WorkspaceException если произошла ошибка при создании новой директории
+     * @see #mkDir(String, File)
+     */
     public static void mkDir(File dir) throws WorkspaceException {
         if (dir.mkdirs()) {
             System.out.println("Директория " + dir.getPath() + " создана.");
@@ -161,6 +211,13 @@ public class WorkspaceUtil {
         }
     }
 
+    /**
+     * Метод создающий директорию в родительской директории
+     * @param name - имя новой директории
+     * @param dir - родительская директория
+     * @throws WorkspaceException если произошла ошибка при создании новой директории
+     * @see #mkDir(File)
+     */
     public static void mkDir(String name, File dir) throws WorkspaceException {
         var d = new File(dir.getPath() + File.separator + name);
         if (!d.exists()) {
@@ -170,14 +227,39 @@ public class WorkspaceUtil {
         }
     }
 
+    /**
+     * Метод создающий файл по полному пути
+     * @param namePath - полный путь нового файла
+     * @return поток вывода нового файла
+     * @throws IOException если произошла ошибка при создании нового файла
+     * @see #mkFile(String, File)
+     * @see #mkFile(File)
+     */
     public static FileOutputStream mkFile(String namePath) throws IOException {
         return mkFile(new File(namePath));
     }
 
+    /**
+     * Метод создающий файл в родительской директории
+     * @param name - имя нового файла
+     * @param dir - родительская директория
+     * @return поток вывода нового файла
+     * @throws IOException если произошла ошибка при создании нового файла
+     * @see #mkFile(String)
+     * @see #mkFile(File)
+     */
     public static FileOutputStream mkFile(String name, File dir) throws IOException {
         return mkFile(dir.getPath() + File.separator + name);
     }
 
+    /**
+     * Метод создающий файл
+     * @param f - новый файл
+     * @return поток вывода нового файла
+     * @throws IOException если произошла ошибка при создании нового файла
+     * @see #mkFile(String)
+     * @see #mkFile(String, File)
+     */
     public static FileOutputStream mkFile(File f) throws IOException {
         if (!f.exists()) {
             return createFile(f);
@@ -189,6 +271,12 @@ public class WorkspaceUtil {
         }
     }
 
+    /**
+     * Метод копирующий файл или рекурсивно директорию
+     * @param src - исходный файл или директория
+     * @param dest - новый файл или директория
+     * @throws IOException если возникает ошибка при копировании
+     */
     public static void cp(File src, File dest) throws IOException {
         if (src.exists()) {
             if (src.isFile()) {

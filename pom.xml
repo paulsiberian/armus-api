@@ -156,7 +156,7 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.1.1</version>
                 <configuration>
-                    <stylesheetfile>${basedir}/src/main/javadoc/style.css</stylesheetfile>
+<!--                    <stylesheetfile>${basedir}/src/main/javadoc/style.css</stylesheetfile>-->
                     <show>public</show>
                 </configuration>
             </plugin>

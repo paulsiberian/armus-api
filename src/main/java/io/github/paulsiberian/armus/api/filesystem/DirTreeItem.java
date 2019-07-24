@@ -10,9 +10,19 @@ import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.File;
 
+/**
+ * Класс модели дерева директорий
+ */
 public class DirTreeItem extends TreeItem<String> implements IFileItem {
+    private final static String OPENED_FOLDER_ICON = "mdi-folder-outline";
+    private final static String CLOSED_FOLDER_ICON = "mdi-folder";
+    /** Директория */
     private File file;
 
+    /**
+     * Конструктор
+     * @param file - директория
+     */
     public DirTreeItem(File file) {
         super(file.getName());
         this.file = file;
@@ -45,11 +55,13 @@ public class DirTreeItem extends TreeItem<String> implements IFileItem {
         }
     }
 
+    /**
+     * Метод получения файла или директории
+     *
+     * @return файл или директория
+     */
     @Override
     public File getFile() {
         return file;
     }
-
-    private final static String OPENED_FOLDER_ICON = "mdi-folder-outline";
-    private final static String CLOSED_FOLDER_ICON = "mdi-folder";
 }
