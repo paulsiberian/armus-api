@@ -7,7 +7,7 @@
 
     <groupId>io.github.paulsiberian.armus</groupId>
     <artifactId>armus-api</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.6</version>
     <name>ARMUS API Library</name>
     <url>https://github.com/paulsiberian/armus-api</url>
     <organization>
@@ -156,7 +156,6 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.1.1</version>
                 <configuration>
-<!--                    <stylesheetfile>${basedir}/src/main/javadoc/style.css</stylesheetfile>-->
                     <show>public</show>
                 </configuration>
             </plugin>
