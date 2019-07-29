@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"io.github.paulsiberian.armus.api"},{"l":"io.github.paulsiberian.armus.api.database"},{"l":"io.github.paulsiberian.armus.api.extension"},{"l":"io.github.paulsiberian.armus.api.filesystem"},{"l":"io.github.paulsiberian.armus.api.utils"},{"l":"io.github.paulsiberian.armus.api.workspace"}]
